@@ -1,14 +1,21 @@
 **Major modifications to the MLUCM code**
 ----------------------------
 1) Parameterization of Lk updated:
-- The length scale is parameterized based on the turbulent length scale instead of the dissipation length scale. 
-parameterization updated based on LkM that includes dispersive stress
-The ck factors taken out and instead Ck.LkM (and similarly Leps/Ceps) is parameterized
-2nd degree polynomial parameterization added for Ck.LkM above building height, a1,a2, a3 parameters introduced and calculated based on Lp
-Ck.LkM below building height is calculated based on Lp (4th order polynomial!)
+- The length scale is parameterized based on the mixing length scale instead of the dissipation length scale. 
+- Ck and Ceps (constants for the k-l scheme) are included in the parameterization (Ck.Lk and similarly Leps/Ceps are parameterized). 
+- The parameterization of the mixing length scale is updated to include the dispersive stress. 
+- Above the building height: **2nd degree polynomial** parameterization as a function of plan area density (Lp) introduced for the mixing length scale. 
+- Below the building height: mixing length scale parameterized as a function of Lp plan area density (4th order polynomial!)
 
-in subroutine 'drag_length', parameters 'bx,by,wx,wy' are passed on so that they are not 'hard-coded' anymore
+2) Parameterization of drag coefficient (Cdeq) 
+- 2nd order polynomial fit introduced (same in the x and y directions) based on **Lp** (and not Lf_x and Lf_y)  
 
-Parameterization of Drag:
-CDeq (same in x and y) updated based on Lp (and not Lf_x and Lf_y)
-by=bx assumption is taken out (how important is that if bx by is correctly passed on)
+3) In subroutine 'drag_length':
+- input parameters 'bx,by,wx,wy' are passed on (previously hard-coded in the subrounite). 
+- by=bx assumption is taken out 
+----------------------------
+
+##Minor modifications to the MLUCM code**
+----------------------------
+1) Modification to the read/write file format 
+2) Makefile added 
