@@ -4,7 +4,7 @@
 
 ## Motivations
 1) Improving the parameterization of turbulent length scale by employing a more accurate turbulence model of atmospheric flow (LES vs RANS). 
-2) Integrating the parameterization of dispersive stress in the 1D model 
+2) Integrating the parameterization of dispersive stress in the 1D model.  
 
 ## License
 Currently no license is needed. 
