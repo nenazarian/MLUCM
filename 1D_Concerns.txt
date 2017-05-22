@@ -1,6 +1,8 @@
+N. Nazarian May 2017
 
+--------------------------------------------------
 **Concerns and Limitations - specification of the 1D model**
-------------------------------------------
+--------------------------------------------------
 1) The model is more sensitive to the simulation setups such as domain height and the Cmu value, than detailed Length scale and drag
 coefficients.
 
@@ -20,13 +22,12 @@ dispersive stress. It may need to be separated. Also, the variability of length 
 different (in both trend and magnitude) for different configurations.
 
 7) The variability of wind direction not integrated in the 1D model
-------------------------------------------
 
-
+--------------------------------------------------
 **Concerns - Code**
-------------------------------------------
+--------------------------------------------------
 1) Hard-coded parameters (including cmu, nlp, nzm, and nzc) are very error-prone.
 **Changing the hard-coded description of domain grid number (nzm) and number of layers within the canopy (nzc) requires changing all reals 
 based on nzm to be changed according to the following
 Real, allocatable, dimension(:) :: dlk
-------------------------------------------
+
