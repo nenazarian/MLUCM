@@ -1,0 +1,29 @@
+   number of points (nz)
+           112
+
+   vertical resolution (dz)
+           1
+
+ pressure forcing (utau_x, utau_y)
+           0.20 0.
+
+ building dimensions (bx,by)
+           16.0 16.0
+
+ distance between buildings (wx,wy)
+           8.0 8.0
+
+ building heights and probabilities (must be an integer number of dz)
+           16.0 1.0
+  ###
+
+ time step (dt)
+  1.
+
+ total time of simulation (time_max)
+  36000.
+
+ frequency of output (prtime)
+  600.
+
+
