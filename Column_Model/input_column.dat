@@ -18,6 +18,7 @@
 
  building heights and probabilities (must be an integer number of dz)
            16.0 1.0
+           ###
 
  time step (dt)
   1.
