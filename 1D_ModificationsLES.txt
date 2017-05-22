@@ -6,7 +6,8 @@ N. Nazarian May 2017
 - The length scale is parameterized based on the mixing length scale instead of the dissipation length scale. 
 - Ck and Ceps (constants for the k-l scheme) are included in the parameterization (Ck.Lk and similarly Leps/Ceps are parameterized). 
 - The parameterization of the mixing length scale is updated to include the dispersive stress. 
-- Above the building height: **2nd degree polynomial** parameterization as a function of plan area density (Lp) introduced for the mixing length scale. 
+- Above the building height: **2nd degree polynomial** parameterization as a function of plan area density (Lp) introduced for the mixing 
+length scale. 
 - Below the building height: mixing length scale parameterized as a function of Lp plan area density (4th order polynomial!)
 
 2) Parameterization of drag coefficient (Cdeq) 
