@@ -24,10 +24,11 @@ different (in both trend and magnitude) for different configurations.
 7) The variability of wind direction not integrated in the 1D model
 
 --------------------------------------------------
-**Concerns - Code**
+**Concerns/Suggestions - Code**
 --------------------------------------------------
 1) Hard-coded parameters (including cmu, nlp, nzm, and nzc) are very error-prone.
 **Changing the hard-coded description of domain grid number (nzm) and number of layers within the canopy (nzc) requires changing all reals 
 based on nzm to be changed according to the following
 Real, allocatable, dimension(:) :: dlk
 
+2) Suggest to add the units in the specification of the input file, and add inputs with the namelist format.  
