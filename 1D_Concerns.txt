@@ -1,9 +1,15 @@
 
 **Concerns - 1D**
-1) The model is more sensitive to the simulation setups such as domain height and the Cmu value, than detailed Length scale and drag coefficients.
-2) With the current forcing setup (pressure gradient), domain height of the 1D model should be at least 7 H (similar to the domain height of LES) to be able to capture the LES results. This is much higher than the usual domain height of 1D model when used in the BEP-tree or integrated in WRF (often 2-3H).
-3) In all cases, the TKE value above building the building height is underestimated, and the surface TKE value is not captured correctly. Mauree et al 2017 proposed a correction for the surface TKE value that can potentially be used in the 1D model as well.
+1) The model is more sensitive to the simulation setups such as domain height and the Cmu value, than detailed Length scale and drag
+coefficients.
+2) With the current forcing setup (pressure gradient), domain height of the 1D model should be at least 7 H (similar to the domain height
+of LES) to be able to capture the LES results. This is much higher than the usual domain height of 1D model when used in the BEP-tree or
+integrated in WRF (often 2-3H).
+3) In all cases, the TKE value above building the building height is underestimated, and the surface TKE value is not captured correctly.
+Mauree et al 2017 proposed a correction for the surface TKE value that can potentially be used in the 1D model as well.
 4) Dispersive TKE not included in the k equation of the 1D model (\tilde{k}\tilde{w}).
-5) If LkM is used (including the dispersive stress in the turbulent length scale), dissipation length scale (L_eps) also integrated the dispersive stress. It may need to be separated. Also, the variability of length scale within the building height is not integrated.
-6) The 1D model does not distinguish between the staggered and aligned configuration, while Cdeq variation and Lk are shown to be very different (in both trend and magnitude) for different configurations.
+5) If LkM is used (including the dispersive stress in the turbulent length scale), dissipation length scale (L_eps) also integrated the
+dispersive stress. It may need to be separated. Also, the variability of length scale within the building height is not integrated.
+6) The 1D model does not distinguish between the staggered and aligned configuration, while Cdeq variation and Lk are shown to be very
+different (in both trend and magnitude) for different configurations.
 7) The variability of wind direction not integrated in the 1D model
