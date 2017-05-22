@@ -1,4 +1,7 @@
-   number of points (nz)
+# An example of the input parameters specified in the 1D model.
+# The name of the file should be kept as "input_column.dat" and the file should be placed in the same directory as the main code.
+
+ number of points (nz)
            112
 
    vertical resolution (dz)
