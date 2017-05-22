@@ -1,2 +1,2 @@
-LES files - Spatially average. 
+LES profiles - Spatially averaged. 
 Description to be added 
