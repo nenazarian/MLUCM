@@ -1,7 +1,7 @@
 N. Nazarian May 2017 
-
-**Major modifications to the MLUCM code**
-----------------------------
+--------------------------------------------------
+***Major modifications to the MLUCM code***
+--------------------------------------------------
 1) Parameterization of Lk updated:
 - The length scale is parameterized based on the mixing length scale instead of the dissipation length scale. 
 - Ck and Ceps (constants for the k-l scheme) are included in the parameterization (Ck.Lk and similarly Leps/Ceps are parameterized). 
@@ -16,9 +16,9 @@ length scale.
 3) In subroutine 'drag_length':
 - input parameters 'bx,by,wx,wy' are passed on (previously hard-coded in the subrounite). 
 - by=bx assumption is taken out 
-----------------------------
 
-##Minor modifications to the MLUCM code**
-----------------------------
+--------------------------------------------------
+***Minor modifications to the MLUCM code***
+--------------------------------------------------
 1) Modification to the read/write file format 
 2) Makefile added 
