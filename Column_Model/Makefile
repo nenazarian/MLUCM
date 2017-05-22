@@ -10,7 +10,7 @@ COMPOPTS = -r8 -g
 #COMPOPTS = -g -ffixed-line-length-none
 
 column_lkPro.o: column_lkPro.f90
-	$(COMPILER)  column_lkPro.f90 
+	$(COMPILER)  column_lkPro.f90 -o Run_1Dcol
 #       ./a.out
 #	$(COMPILER) column_lkPro.f90 -o -g -traceback Run_1Dcol 
 clean:
