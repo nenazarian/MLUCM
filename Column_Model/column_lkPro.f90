@@ -6,6 +6,10 @@
 !     +                        email:alberto.martilli@ciemat.es        +
 !     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 !     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+!     +  Modified by S. Krayenhoff,  UBC      Mar 2013 - Jun 2014      +
+!     +                        email:scott.krayenhoff@alumni.ubc.ca    +
+!     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+!     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 !     +  Modified by N. Nazarian,    Singapore-MIT   Jan-May 2017      +
 !     +                        email:negin@smart.mit.edu               +
 !                                   /nenazarian@gmail.com              +
