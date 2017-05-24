@@ -15,9 +15,12 @@ Mauree et al 2017 proposed a correction for the surface TKE value that can poten
 
 4) Dispersive TKE not included in the k equation of the 1D model (\tilde{k}\tilde{w})
 
-5) The length scale calculated based on LES reaches zero at the top boundary (since u'w'(nz)=0), while in RANS the length scale is monotonically increasing with height. Additionally, the variability of the length scale within the building height is not introduced (averaged Ck.LkM within the building canyon parameterized). 
+5) The length scale calculated based on LES reaches zero at the top boundary (since u'w'(nz)=0), while in RANS the length scale is 
+monotonically increasing with height. Additionally, the variability of the length scale within the building height is not introduced 
+(averaged Ck.LkM within the building canyon parameterized). 
 --------------------------------------------------
-6) FUTURE CONSIDERATIONS: The 1D model does not distinguish between the staggered and aligned configuration, while Cdeq variation and Lk are shown to be very different (in both trend and magnitude) for different configurations.
+6) FUTURE CONSIDERATIONS: The 1D model does not distinguish between the staggered and aligned configuration, while Cdeq variation and Lk 
+are shown to be very different (in both trend and magnitude) for different configurations.
 
 7) FUTURE CONSIDERATIONS:The variability of wind direction not integrated in the 1D model
 
