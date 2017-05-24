@@ -449,18 +449,28 @@
 ! output
       real cdragx(nzm),cdragy(nzm)
 !local
-      real disp,a1,a2,zc,d2
+      real disp,zc
       real lambdaf_x,lambdaf_y,bx,by,wx,wy,zh
 !-----------------------------------------------------------------
-! May 2017 Neg: added for calculating the coefficent of the polynomial	fit for lk   
+! May 2017 Neg: added for calculating the coefficent of the polynomial	and guassian fit for lk   
 ! based on LES 
 ! Staggered only now 
 !-----------------------------------------------------------------
       real aa1, aa2, aa3 
+	  real a1,b1,c1,a2,b2,c2
+! Polynomial fit for Ck.LkM above the building height 
       aa1=-0.351-0.811*exp(-lambdap/0.086)
       aa2=2.822+7.971*exp(-lambdap/0.078)
       aa3=-1.721-13.328*exp(-lambdap/0.047)
-
+! Gaussian fit for Ck.Lkt below the building height 	  
+      a1 =   18.19  
+      b1 =   0.1388  
+      c1 =   0.2503  
+! Gaussian fit for Ck.LkM below the building height 	  
+      a2 =   26.54   
+      b2 =   0.1676  
+      c2 =   0.1676  
+	  
       write(*,*)aa1,aa2,aa3
 !----------------------Neg april 2017
 ! ------ This part was commented and instead input parameters included for the function
@@ -499,13 +509,13 @@
 ! ---------------April 2017 by Neg: Parameterization of drag modified based on the LES results 
       if(lambdaf_x.le.0.44)then
       do iz=1,nz
-        cdragx(iz)=(-6.556*(lambdap)**(2)+10.4*(lambdap)-0.062)
+        cdragx(iz)=-9.947*(lambdap)**(2)+11.693*(lambdap)
         cdragy(iz)=cdragx(iz)
        enddo
-	  else
+       else
        do iz=1,nz
-        cdragx(iz)=3.245
-        cdragy(iz)=3.245
+        cdragx(iz)=3.22
+        cdragy(iz)=3.22
        enddo
       endif
 
@@ -516,13 +526,16 @@
       do iz=1,nz
        zc=(z(iz)+z(iz+1))/2.
 !  based on wpup + wtut 
-!  ----  2nd degree polynomial fit for length scale        
+!  ----  guassian fit for length scale that integrates point (Lp=1,Lk=0)    
        if((zc/hmean).le.1.)then
-       dlk(iz)= -421.1*(lambdap)**4+554.3*lambdap**3-265.82*lambdap**2+47.35*lambdap-0.33
+! This is Ck.LkM where only u'w' + utwt both included 
+        dlk(iz)=Cmu*(a2*exp(-((lambdap-b2)/c2)**(2)))
+! This is Leps/Ceps where only u'w' included and the value of Cmu is based on RANS	
+        dls(iz)=(a1*exp(-((lambdap-b1)/c1)**(2))) 
        elseif((zc/hmean).gt.1.)then
-       dlk(iz)= aa1*(zc/hmean)**2 +aa2*(zc/hmean)+ aa3  !  based on both upwp and upwp+wtut
+        dlk(iz)= aa1*(zc/hmean)**2 +aa2*(zc/hmean)+ aa3  !  based on both upwp and upwp+wtut
+        dls(iz)=dlk(iz)/Cmu ! This is Leps/Ceps and the value of Cmu is based on RANS
        endif
-       dls(iz)=dlk(iz)/Cmu ! This is Leps/Ceps and the value of Cmu is based on RANS
        write(37,*) zc/hmean, dlk(iz)
       enddo
 ! --------------------------------------------------------------------
