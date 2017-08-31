@@ -10,7 +10,7 @@
 !     +                        email:scott.krayenhoff@alumni.ubc.ca    +
 !     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 !     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-!     +  Modified by N. Nazarian,    Singapore-MIT   Jan-May 2017      +
+!     +  Modified by N. Nazarian,    Singapore-MIT   Jan-Sept 2017      +
 !     +                        email:negin@smart.mit.edu               +
 !                                   /nenazarian@gmail.com              +
 !     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -21,7 +21,7 @@
            parameter (nzc=18)    ! number of canopy levels in the vertical
            parameter (nlp=1)
            parameter (nscen=1)  ! number of scenarios
-   
+
 ! flow variables
            real vx(nzm) ! x component of the wind
            real vy(nzm) ! y component of the wind
@@ -97,31 +97,30 @@
            real cdrel_tot,cdeq(nscen,nzm),leps_o_ceps(nscen,nzm),lambdap(nscen)
            logical no_cdragveg,no_cdragveg1,no_cdragveg2,novegdrag,novegdrag1,noleps
            logical no_cdragbld,no_cdragbld1
-		   
+
 ! --------------------------------------------
-!        Neg April 2017: Added to 1) introduce output files, and 2) include heather line in output file     
+! Neg April 2017: Added to 1) introduce new output files, and 2) include heather line in output file
 ! c OPEN OUTPUT FILES
        open(unit=68,file='output_final.out')
        open(unit=30,file='calc_par.out')
-!   --- Can potentially add a flag here that disables write to this file. 
+!   --- Can potentially add a flag here that disables write to this file.
        open(unit=37,file='CkLkM_verPro.out')
-!      format 
-        2001 format ( 8(A,7X)) 
+!      format
+        2001 format ( 8(A,7X))
         2011 format (1x,2(A,4X))
 ! --------------------------------------------
-! --------------------------------- FUTURE modifications		   
-!    ------------ May 2017 - namelist format can be added to allow modification 
-!                 of input parameters outside of the code in the inupdate.in file. 
-! --------------- However, this requires that parameters of type real to be changed 
-! --------------- to allocatble format. 
+! --------------------------- FUTURE modifications
+! --------------- May 2017 - namelist format can be added to allow modification
+! --------------- of input parameters outside of the code in the inupdate.in file.
+! --------------- However, this requires that parameters of type real to be changed
+! --------------- to allocatble format.
 !        Ex: real dlk(nzm) --> real,allocatable,dimension(:) :: dlk
 !        namelist /inipar/ nzm, nzc, nlp, nscen
 !      open(444,file='inupdate.in',status='OLD',recl=80,
 !      &      delim='APOSTROPHE', FORM='FORMATTED')
 !      read(444,nml=inipar)
-!    ------------
 ! --------------------------------------------
-   
+
 ! --------------------------- Jan 2017 Neg commented out specification of vegetation
 ! read cases
 !          open(unit=75,file='z.out')
@@ -134,13 +133,21 @@
 !            read(75,*)(lad(is,iz),iz=1,nzm)
 !           enddo
 !                 close(75)
+! --------------------------------------------
 
+! --------------------------- Neg May 2017 In CASE EXACT PROFILE OF LK IS IMPORTED
+! ---------------Note: Using this option, the dlk calculation based on Lp scenario is not considered
+!           open(unit=75,file='dlk.dat')
+!             read(75,*)(dlk(iz),iz=1,nzm)
+!            close(75)
+!
 ! ---------------------------- Jan 2017 Neg changed file format to .dat
           open(unit=75,file='lambdaP.dat')
            do is=1,nscen
             read(75,*)lambdap(is)
            enddo
          close(75)
+! --------------------------------------------
 
           cdragveg=0.2
           cdragveg1=0.2
@@ -181,7 +188,7 @@
 
 
 ! read the input, define the mesh and obstacle paramters and intialize
-           call read_input(nzm,nz,z,dz,dt,time_max,ntime,prtime,utau_x,utau_y,dpdx,dpdy, &
+         call read_input(nzm,nz,z,dz,dt,time_max,ntime,prtime,utau_x,utau_y,dpdx,dpdy, &
                            pb,ss,wx,wy,bx,by,hmean,vl,sf)
 
           do is=1,nscen
@@ -276,25 +283,21 @@
 ! compute the vertical diffusion
             call diff(nzm,nz,1,1,dt,vx,cdz,srim_vx,srex_vx,sf,vl,dz,uw,duwdz)
             call diff(nzm,nz,1,1,dt,vy,cdz,srim_vy,srex_vy,sf,vl,dz,vw,dvwdz)
-            call diff(nzm,nz,1,1,dt,tke,cdz,srim_tke,srex_tke,sf,vl,dz,wtke,dwtkedz)
+            call diff(nzm,nz,1,2,dt,tke,cdz,srim_tke,srex_tke,sf,vl,dz,wtke,dwtkedz)
             call diff(nzm,nz,1,1,dt,trc,cdz,srim_trc,srex_trc,sf,vl,dz,wtrc,dwtrcdz)
 
               if(time_pr.gt.prtime)then
                write(*,*)'time=',time, vx(nzc)
                time_pr=dt
-!               write(66,*)'time=',time,'time_pr=',time_pr
                do iz=1,nz
                 uwm=(uw(iz)+uw(iz+1))/2.
-!                write(66,*)iz,vx(iz)/utau_x,tke(iz)/(utau_x**2.),uwm/(utau_x**2.)
                enddo
-!               write(67,*)vx(nzc),tke(nzc),uw(nzc),trc(nzc)
               endif
            enddo
-!           close(66)
 
            write(*,*)'time=',time
-           write(68,2001) 'Znumber', 'lad_max', 'vx/utau_x', 'tke/(utau_x**2.)', 'uwm/(utau_x**2.)', 'trc', 'wtrcm/emi', 'cdragx'            
-		   do iz=1,nz
+           write(68,2001) 'Znumber', 'lad_max', 'vx/utau_x', 'tke/(utau_x**2.)', 'uwm/(utau_x**2.)', 'trc', 'wtrcm/emi', 'cdragx'
+                   do iz=1,nz
               uwm=(uw(iz)+uw(iz+1))/2.
               wtrcm=(wtrc(iz)+wtrc(iz+1))/2.
               write(68,'(i3,7(2x,f15.8))')iz,lad_max,vx(iz)/utau_x,tke(iz)/(utau_x**2.),uwm/(utau_x**2.),trc(iz),wtrcm/emi,cdragx(iz)
@@ -436,7 +439,7 @@
 
       return
       end
-! April 2016 by Neg: added bx by wx wy as the input of this function to avoid hard-coded input of bx by
+! April 2016 by Neg: added bx by wx wy as the input of this function to avoid hard-coded input of bx and by
 !-----------------------------------------------------------------
       subroutine drag_length(nzm,nz,z,bx,by,wx,wy,hmean,lambdap,ceps,ck,cmu,cdragx,cdragy,dls,dlk)
       implicit none
@@ -452,45 +455,39 @@
       real disp,zc
       real lambdaf_x,lambdaf_y,bx,by,wx,wy,zh
 !-----------------------------------------------------------------
-! May 2017 Neg: added for calculating the coefficent of the polynomial	and guassian fit for lk   
-! based on LES 
-! Staggered only now 
+! May 2017 Neg: added for calculating the coefficent of a) the guassian fit for lk  below building height and
+! b) Linear fit for Lk above the building
+! based on LES
+! Staggered only now
 !-----------------------------------------------------------------
-      real aa1, aa2, aa3 
-	  real a1,b1,c1,a2,b2,c2
-! Polynomial fit for Ck.LkM above the building height 
-      aa1=-0.351-0.811*exp(-lambdap/0.086)
-      aa2=2.822+7.971*exp(-lambdap/0.078)
-      aa3=-1.721-13.328*exp(-lambdap/0.047)
-! Gaussian fit for Ck.Lkt below the building height 	  
-      a1 =   18.19  
-      b1 =   0.1388  
-      c1 =   0.2503  
-! Gaussian fit for Ck.LkM below the building height 	  
-      a2 =   26.54   
-      b2 =   0.1676  
-      c2 =   0.1676  
-	  
-      write(*,*)aa1,aa2,aa3
-!----------------------Neg april 2017
-! ------ This part was commented and instead input parameters included for the function
-!Temporary, for Negin's data:
-! 	bx=16.
-! 	wx=16.
-!   zh=18.
-
-! assuming square buildings, not accounting for variable pb (assuming pb = 1 below zH):
-!       bx=sqrt(lambdap)
-!       by=bx
-!       wx=1.-bx
-!       wy=wx
-
+         real a1,b1,c1,a2,b2,c2
+         real aa1, bb1, aa2, bb2
+!-----------------------------------------------------------------
+! Gaussian fit for Ck.Lkt below the building height (z/H<1)
+! To be used for the Leps
+      a1 =   1.6352
+      b1 =   0.1385
+      c1 =   0.252
+! Gaussian fit for Ck.LkM below the building height (z/H<1)
+      a2 =   2.3421
+      b2 =   0.1671
+      c2 =   0.2208
+!-----------------------------------------------------------------
+!-----------------------------------------------------------------
+! Linear fit for Ck.LkM above the building height (1<z/H<1.5)
+! Note that LkM and Lkt are the same above the building height
+      aa1 =   0.3 + 5.127*exp(-lambdap/0.479)
+      bb1 =   -1.168-3.321*exp(-lambdap/0.348)
+! Linear fit for Ck.LkM above the building height (1.5<z/H)
+! Note that LkM and Lkt are the same above the building height
+      aa2 =   2.22  ! assuming variability of slope above 1.5H is low
+!         aa2 =   0.14*lambdap+2.186  ! considering variability of slope above 1.5H but very low value of R
+      bb2 =  (aa1-aa2)*1.5+bb1
 
 ! since normalized mean building height is 1.0, and normalized urban unit area is 1.0
        zh=hmean
        lambdaf_x=bx*zh/((bx+wx)*(by+wy))
        lambdaf_y=by*zh/((bx+wx)*(by+wy))
-!            write(30,*)'Scenario number=', is
             write(30,*)'Lfx =',lambdaf_x
             write(30,*)'Lp =',lambdap
             write(30,*)'bx=',bx, ' wx=', wx
@@ -501,18 +498,16 @@
 ! because hmean is used here we can simply use the lambda_p at ground level and it will work for any building height distribution pb; of course there is an assumption
 ! inherent in this that length scales will behave similarly for different levels of building height variability
       disp=hmean*(lambdap)**(0.15)
-!      disp=hmean*(lambdap)**(0.13)
 
 ! Drag coefficient
 ! The 'do' and 'if' statements need to be reversed in order for the final model version (so that cdrag depends on lambdaP*pb at each level)
-
-! ---------------April 2017 by Neg: Parameterization of drag modified based on the LES results 
+! ---------------April 2017 by Neg: Parameterization of drag modified based on the LES results
       if(lambdaf_x.le.0.44)then
-      do iz=1,nz
+      do iz=1,nz   
         cdragx(iz)=-9.947*(lambdap)**(2)+11.693*(lambdap)
         cdragy(iz)=cdragx(iz)
        enddo
-       else
+      else
        do iz=1,nz
         cdragx(iz)=3.22
         cdragy(iz)=3.22
@@ -522,21 +517,24 @@
 !----------- Added by Negin May 2016--- --------------------------
 ! ------------------length scale CkLk -----------------------------
 ! ------------------note that Ck is included in the parameterizatin ---------
-        write(37,*) ' zc/hmean  ', ' CkLkM'
+        write(37,*) ' zc/hmean  ', ' CkLkM  ', '  Leps/Ceps'
       do iz=1,nz
        zc=(z(iz)+z(iz+1))/2.
-!  based on wpup + wtut 
-!  ----  guassian fit for length scale that integrates point (Lp=1,Lk=0)    
+!  based on wpup + wtut
+!  ----  guassian fit for length scale that integrates point (Lp=1,Lk=0)
        if((zc/hmean).le.1.)then
-! This is Ck.LkM where only u'w' + utwt both included 
-        dlk(iz)=Cmu*(a2*exp(-((lambdap-b2)/c2)**(2)))
-! This is Leps/Ceps where only u'w' included and the value of Cmu is based on RANS	
-        dls(iz)=(a1*exp(-((lambdap-b1)/c1)**(2))) 
-       elseif((zc/hmean).gt.1.)then
-        dlk(iz)= aa1*(zc/hmean)**2 +aa2*(zc/hmean)+ aa3  !  based on both upwp and upwp+wtut
+! This is Ck.LkM where only u'w' + utwt both included
+        dlk(iz)=(a2*exp(-((lambdap-b2)/c2)**(2)))
+! This is Leps/Ceps where only u'w' included and the value of Cmu is based on RANS
+        dls(iz)=(a1*exp(-((lambdap-b1)/c1)**(2)))/Cmu
+       elseif((zc/hmean).gt.1..and.(zc/hmean).le.1.5)then
+        dlk(iz)=aa1*(zc/hmean)+bb1
+        dls(iz)=dlk(iz)/Cmu ! This is Leps/Ceps and the value of Cmu is based on RANS
+       elseif((zc/hmean).gt.1.5)then
+        dlk(iz)=aa2*(zc/hmean)+bb2
         dls(iz)=dlk(iz)/Cmu ! This is Leps/Ceps and the value of Cmu is based on RANS
        endif
-       write(37,*) zc/hmean, dlk(iz)
+        write(37,*) zc/hmean, dlk(iz), dls(iz)
       enddo
 ! --------------------------------------------------------------------
       return
@@ -617,7 +615,7 @@
        wx_tmp=1.-bx_tmp
 ! --------------------
 !      Neg May 2017: this calculation replaces the value of wx and wy from the user input, therefore
-!                    it is not accurate to use nscen~=1. Recommand using different symbol 
+!                    it is not accurate to use nscen~=1. Recommand using different symbol
        wx=wx_tmp*bx/max(bx_tmp,1.e-9)
        wy=wx
        lfx=dz*by/((wx+bx)*(wy+by))*pb(iz+1)
@@ -837,12 +835,24 @@
            c(iz)=co(iz)+bb(iz)*dt
           enddo
 
-          if(izf.eq.1)then
+         if(izf.eq.1)then
            dzv=vl(nz)*dz
            a(nz,1)=-cddz(nz)*dt/dzv
            a(nz,2)=1+dt*(cddz(nz))/dzv-aa(nz)*dt
            a(nz,3)=0.
            c(nz)=co(nz)+bb(nz)*dt
+! Neg Aug 2017 - This flag is inputted to mannually set the value
+! of TKE as the top boundary. Accordingly when diff function is called,
+! izf is set to 2 for TKE.
+! NOTE: The value used here is only valid for Lp=0.25 Staggered.
+          elseif(izf.eq.2)then
+           do iz=nz-izf+1,nz
+            a(iz,1)=0.
+            a(iz,2)=1.
+            a(iz,3)=0.
+            c(iz)=0.042
+           enddo
+
           else
            do iz=nz-izf+1,nz
             a(iz,1)=0.
@@ -918,3 +928,5 @@
 
         return
         end
+                                                                                                                                                                                                                                                                                                                                                                               
+	  
