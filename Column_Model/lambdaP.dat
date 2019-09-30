@@ -1,3 +1,5 @@
-# The value of plan area density (Lambda_p)
-# Currently only one Lp value is possible
-0.4444
+#     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#     Goal: The 1D model can loop over a range of different Lambda_p 
+#			values. Hoever, only one value of Lambda_p is prescribed currently. 
+#     ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+0.0625
