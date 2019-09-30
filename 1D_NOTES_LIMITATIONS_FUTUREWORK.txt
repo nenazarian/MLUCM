@@ -10,3 +10,4 @@ N. Nazarian May 2019
 3) LIMITATION AND FUTURE DIRECTION: Dispersive TKE (\tilde{k}\tilde{w}) is not included in the k equation in the current version of the 1D model.
 
 4) LIMITATION AND FUTURE DIRECTION: The variability of wind direction is not integrated in the current version of the 1D model
+--------------------------------------------------
