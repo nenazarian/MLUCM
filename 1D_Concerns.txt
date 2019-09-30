@@ -1,35 +1,12 @@
-N. Nazarian May 2017
+N. Nazarian May 2019
 
 --------------------------------------------------
-**Concerns and Limitations - specification of the 1D model**
+**Notes and Limitations - specification of the 1D model**
 --------------------------------------------------
-1) The model is more sensitive to the simulation setups such as domain height and the Cmu value, than detailed Length scale and drag
-coefficients introduced based on the LES results.
+1) NOTE: With the current forcing setup (pressure gradient), domain height of the 1D model should be at least 7 H (similar to the domain height of LES) to be able to remove the impact of top boundary condition on street-level flow and turbulent field. This is much higher than the usual domain height of 1D model when used in the BEP-tree or integrated in WRF (often 2-3H). In these conditions, the constant TKE value at top bounadry is recommended. 
 
-2) With the current forcing setup (pressure gradient), domain height of the 1D model should be at least 7 H (similar to the domain height
-of LES) to be able to capture the LES results. This is much higher than the usual domain height of 1D model when used in the BEP-tree or
-integrated in WRF (often 2-3H).
-
-3) In all cases, the TKE value above building the building height is underestimated, and the surface TKE value is not captured correctly.
-Mauree et al 2017 proposed a correction for the surface TKE value that can potentially be used in the 1D model as well.
-
-4) Dispersive TKE not included in the k equation of the 1D model (\tilde{k}\tilde{w})
-
-5) Regarding the length scale: a) Polynomial fit above the building height may not be the best! b) The length scale calculated based on 
-LES reaches zero at the top boundary (since u'w'(nz)=0), while in RANS the length scale is monotonically increasing with height. c) The variability of the length scale within the building height is not introduced (averaged Ck.LkM within the building canyon parameterized). 
+2) NOTE: The 1D model does not distinguish between the staggered and aligned configuration, while Cdeq variation and the flow profiles can be significantly influenced by the urban configuration. Overall, average wind speed, and consequently the turbulent momentum flux and TKE, are significantly larger for aligned array of cubes with streamwise flow aligned with urban street canyon. However, it is worth noting that in real cities, the aligned configuration with 0\degree wind angle may not be most representative of flow field. Real cities experience a range of wind directions relative to the street grid, and many cities do not have a grid but rather streets of many orientations. Our simulations (similar to many 'urban' CFD simulations) represent buildings with two street directions oriented perpendicular to each other, with streamwise flow oriented perpendicular to one set of building faces. The aligned version of this setup represents a special case relative to real cities: those scenarios where wind direction is aligned with one of the two street directions. The staggered version of this setup, conversely, presents no major corridors (i.e., streets) aligned with the wind that do not include building drag. As such, we believe that the staggered configuration better represents the impacts of real cities on urban canopy flow under a variety of wind directions. Any choice here is a simplification of reality, and the choice of a regular staggered array provides a closer approximation to average conditions in real cities in our estimation.
 --------------------------------------------------
-6) FUTURE CONSIDERATIONS: The 1D model does not distinguish between the staggered and aligned configuration, while Cdeq variation and Lk 
-are shown to be very different (in both trend and magnitude) for different configurations.
+3) LIMITATION AND FUTURE DIRECTION: Dispersive TKE (\tilde{k}\tilde{w}) is not included in the k equation in the current version of the 1D model.
 
-7) FUTURE CONSIDERATIONS:The variability of wind direction not integrated in the 1D model
-
-
---------------------------------------------------
-**Concerns/Suggestions - Code**
---------------------------------------------------
-1) Hard-coded parameters (including cmu, nlp, nzm, and nzc) are very error-prone.
-**Changing the hard-coded description of domain grid number (nzm) and number of layers within the canopy (nzc) requires changing all reals 
-based on nzm to be changed according to the following
-Real, allocatable, dimension(:) :: dlk
-
-2) Suggest to add the units in the specification of the input file, and add inputs with the namelist format.  
+4) LIMITATION AND FUTURE DIRECTION: The variability of wind direction is not integrated in the current version of the 1D model
